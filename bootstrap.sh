@@ -5,4 +5,4 @@ if [ -z "${LOCAL_BIN+x}" ] ; then
 fi
 INSTALL=$LOCAL_BIN/wer
 rm -f $INSTALL
-ln -s $(pwd)/wer $INSTALL
+ln -s $(pwd)/wer.pl $INSTALL
