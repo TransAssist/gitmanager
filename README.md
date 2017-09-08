@@ -1,1 +1,5 @@
 # gitmanager
+
+# install
+`./bootstrap.sh`
+
