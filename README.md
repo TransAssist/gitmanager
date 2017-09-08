@@ -1,4 +1,4 @@
-# gitmanager
+# wer
 
 # install
 `./bootstrap.sh`
