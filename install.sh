@@ -6,3 +6,5 @@ fi
 INSTALL=$LOCAL_BIN/wer
 rm -f $INSTALL
 ln -s $(pwd)/wer.pl $INSTALL
+
+echo "complate"
