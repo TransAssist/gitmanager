@@ -48,12 +48,18 @@ $bin_dir = dirname($bin_path).$sl;
 #print "bin_dir:".$bin_dir."\n";
 
 
+#initialize
+my $default_shebang="#!/usr/bin/env ";
+
 ##args
 my ($cmd, $param);
 if (@ARGV == 0){
   &hello("wer");
   print &date()." ".&time().$br;
-  &testbash();
+  print "---config---".$br;
+  print "default_shebang:".$default_shebang."[cmd]$br";
+  &test("bash","tool/test.sh");
+  &test("perl","tool/test.pl");
 }elsif (@ARGV == 1 or @ARGV == 2){
   my $cmd = $ARGV[0];
   if (@ARGV == 1){
@@ -92,10 +98,9 @@ sub exec {
   my $result = `$command 2>&1`;
   return $result;
 }
-sub testbash {
-  my $res = &exec($bin_dir."tool/test.sh"); 
-  print "testbash:".$res;
+sub test {
+  (my $name,my $cmdpath) = @_;
+  my $res = &exec($bin_dir.$cmdpath);
+  my $result = $res eq "complete" ? "ok" : "ng";
+  print "test_".$name." : ".$res." ==> [".$result."]".$br;
 }
-
-
-
