@@ -53,6 +53,7 @@ $bin_dir = dirname($bin_path).$sl;
 my $default_shebang="#!/usr/bin/env ";
 ##cache
 #my $tmp_dir=$br."tmp".$br;
+#my $tmp_dir=$bin_dir."cache".$sl;
 my $tmp_status=$bin_dir."profile".$sl."status.json";
 my $tmp_werc=$bin_dir."profile".$sl."werc";
 
