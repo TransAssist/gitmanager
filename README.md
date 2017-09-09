@@ -1,17 +1,17 @@
 # wer
 env manager
 
-## require
-* system envroiment $LOCAL\_BIN e.g. ~/bin
+## environment
 * perl >= 5
+* (system envroiment $LOCAL\_BIN e.g. ~/bin)
 
 # install
-linux & oxs
+linux & oxs  
 `make install`
 
 # uninstall
-linux & oxs
+linux & oxs  
 `make uninstall`
 
 # author
-onoie `<onoie3@gmail.com>`
+onoie
