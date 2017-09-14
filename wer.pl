@@ -19,6 +19,7 @@ use JSON;
 ##os
 my $br;
 my $sl;
+#my $processnumberstring = "$$";
 my $os="$^O\n";
 if ($os eq "MSWin32"){
   #windows:MSWin32i
@@ -49,7 +50,7 @@ $bin_dir = dirname($bin_path).$sl;
 #print "bin_path:".$bin_path."\n";
 #print "bin_dir:".$bin_dir."\n";
 
-##initialize
+##set default
 my $default_shebang="#!/usr/bin/env ";
 ##cache
 #my $tmp_dir=$br."tmp".$br;
@@ -59,6 +60,10 @@ my $tmp_werc=$bin_dir."profile".$sl."werc";
 
 ##args
 my ($cmd, $param);
+my $wer_help = <<'EOS';
+wer [help/hello/check/init]
+wer [status/werc] [load/write]
+EOS
 if (@ARGV == 0){
   print &date()." ".&time().$br;
   print "---config---".$br;
@@ -67,24 +72,44 @@ if (@ARGV == 0){
   &test("perl","tool/test.pl");
   print "tmp_status:".$tmp_status.$br;
   print "tmp_werc:".$tmp_werc.$br;
-}elsif (@ARGV == 1 or @ARGV == 2){
-  my $cmd = $ARGV[0];
+}elsif ( @ARGV == 1 or @ARGV == 2 or @ARGV == 3 ){
+  my $p1 = $ARGV[0],my $p2 = $ARGV[1],my $p3 = $ARGV[2];
   if (@ARGV == 1){
-    if ($cmd eq "hello"){
+    print "p1=$p1 $br";
+    if ($p1 eq "help"){
+      print "$wer_help";
+    }elsif($p1 eq "hello"){
       &hello("wer");
-    }elsif($cmd eq "load"){
-      &status_load();
-    }elsif($cmd eq "write"){
-	  &status_write();
+    }elsif($p1 eq "init"){
+      &init();
+    }elsif($p1 eq "check"){
+      &check();
 	}else{
-      print "unknown simple command:$cmd$br";
+      print "unknown simple param:$p1".$br;
 	}
-  }else{
-    my $param = $ARGV[1];
-    print "A=$cmd,B=$param$br";
+  }elsif(@ARGV == 2){
+    print "p1=$p1,p2=$p2".$br;
+    if ($p1 eq "status"){
+      ##for status.json
+      if($p2 eq "load"){
+        &status_load();
+      }elsif($p2 eq "write"){
+        &status_write();
+      }
+    }elsif($p1 eq "werc"){
+      ##for werc
+      if($p2 eq "load"){
+        &werc_load();
+      }elsif($p2 eq "write"){
+        &werc_write();
+      }
+    }
+  }elsif(@ARGV == 3){
+    print "p1=$p1,p2=$p2,p3=$p3".$br;
   }
+  exit(0);
 }else{
-  print "unknown cmd pattern$br";
+  print "unknown param pattern$br";
   exit(0);
 }
 
@@ -117,6 +142,24 @@ sub test {
   my $result = $res eq "complete" ? "ok" : "ng";
   print "test_".$name." : ".$res." ==> [".$result."]".$br;
 }
+sub check{
+  my $file = "ok";
+  if (-e $file) {
+    die "$file already exists";
+  }else {
+    open my $fh, ">", $file
+      or die "$file erro : $!";
+  close $fh;
+  }
+#  if (!-d "./test_dir"){
+#    mkdir "./test_dir";
+#  }else{
+#    print "Directory already exists!\n";
+#  } 
+}
+sub init{
+print "initialized".$br;
+}
 sub status_load{
   print "load:".$tmp_status.$br;
   open(DATAFILE, "< ".$tmp_status) or die("Error:$!");
@@ -127,4 +170,10 @@ sub status_load{
 }
 sub status_write{
   print "status write".$br;
+}
+sub werc_load{
+  print "werc load".$br;
+}
+sub werc_write{
+  print "werc write".$br;
 }
