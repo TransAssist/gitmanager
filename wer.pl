@@ -10,6 +10,7 @@ use open ":utf8";
 ##
 use Cwd;
 use FindBin;
+use File::Fetch;
 use File::Basename;
 use JSON;
 
@@ -61,8 +62,10 @@ my $tmp_werc=$bin_dir."profile".$sl."werc";
 ##args
 my ($cmd, $param);
 my $wer_help = <<'EOS';
-wer [help/hello/check/init]
-wer [status/werc] [load/write]
+wer help/hello/check/init
+wer status load/write
+wer werc load/write
+wer save [url]
 EOS
 if (@ARGV == 0){
   print &date()." ".&time().$br;
@@ -89,7 +92,9 @@ if (@ARGV == 0){
 	}
   }elsif(@ARGV == 2){
     print "p1=$p1,p2=$p2".$br;
-    if ($p1 eq "status"){
+    if ($p1 eq "save"){
+      &save($p2);
+    }elsif ($p1 eq "status"){
       ##for status.json
       if($p2 eq "load"){
         &status_load();
@@ -176,4 +181,11 @@ sub werc_load{
 }
 sub werc_write{
   print "werc write".$br;
+}
+sub save{
+  (my $url) = @_;
+#  my $url = "http://x-as.com/TransAssist.gif";
+  print "save:$url".$br;
+  my $ff = File::Fetch->new(uri => $url);
+  my $file = $ff->fetch() or die $ff->error;
 }
