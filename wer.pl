@@ -54,18 +54,20 @@ $bin_dir = dirname($bin_path).$sl;
 ##set default
 my $default_shebang="#!/usr/bin/env ";
 ##cache
-#my $tmp_dir=$br."tmp".$br;
-#my $tmp_dir=$bin_dir."cache".$sl;
-my $tmp_status=$bin_dir."profile".$sl."status.json";
-my $tmp_werc=$bin_dir."profile".$sl."werc";
+my $tmp_dir=$sl."tmp".$sl;
+my $tmp_flg=$tmp_dir."ok";
+my $cache=$bin_dir."cache".$sl;
+my $cache_status=$bin_dir."profile".$sl."status.json";
+my $cache_werc=$bin_dir."profile".$sl."werc";
 
 ##args
 my ($cmd, $param);
 my $wer_help = <<'EOS';
-wer help/hello/check/init
+wer help/hello/check/init/run
 wer status load/write
 wer werc load/write
 wer save [url]
+.bashrc:+`perl $LOCAL_BIN/wer run`
 EOS
 if (@ARGV == 0){
   print &date()." ".&time().$br;
@@ -73,8 +75,11 @@ if (@ARGV == 0){
   print "default_shebang:".$default_shebang."[cmd]$br";
   &test("bash","tool/test.sh");
   &test("perl","tool/test.pl");
-  print "tmp_status:".$tmp_status.$br;
-  print "tmp_werc:".$tmp_werc.$br;
+  print "tmp_dir:".$tmp_dir.$br;
+  print "tmp_flg:".$tmp_flg.$br;
+  print "cache:".$cache.$br;
+  print "cache_status:".$cache_status.$br;
+  print "cache_werc:".$cache_werc.$br;
 }elsif ( @ARGV == 1 or @ARGV == 2 or @ARGV == 3 ){
   my $p1 = $ARGV[0],my $p2 = $ARGV[1],my $p3 = $ARGV[2];
   if (@ARGV == 1){
@@ -87,6 +92,8 @@ if (@ARGV == 0){
       &init();
     }elsif($p1 eq "check"){
       &check();
+    }elsif($p1 eq "run"){
+      &run();
 	}else{
       print "unknown simple param:$p1".$br;
 	}
@@ -147,27 +154,26 @@ sub test {
   my $result = $res eq "complete" ? "ok" : "ng";
   print "test_".$name." : ".$res." ==> [".$result."]".$br;
 }
-sub check{
-  my $file = "ok";
+sub init{
+  my $file = $tmp_dir."ok";
   if (-e $file) {
     die "$file already exists";
   }else {
     open my $fh, ">", $file
       or die "$file erro : $!";
-  close $fh;
+    close $fh;
   }
-#  if (!-d "./test_dir"){
-#    mkdir "./test_dir";
-#  }else{
-#    print "Directory already exists!\n";
-#  } 
 }
-sub init{
-print "initialized".$br;
+sub check{
+  if (-e $tmp_flg) {
+    print "already exists".$br;
+  }else {
+    print "not found".$br;
+  }
 }
 sub status_load{
-  print "load:".$tmp_status.$br;
-  open(DATAFILE, "< ".$tmp_status) or die("Error:$!");
+  print "load:".$cache_status.$br;
+  open(DATAFILE, "< ".$cache_status) or die("Error:$!");
   while(my $line = <DATAFILE>){
     chomp($line);
     print "$line".$br;
@@ -188,4 +194,7 @@ sub save{
   print "save:$url".$br;
   my $ff = File::Fetch->new(uri => $url);
   my $file = $ff->fetch() or die $ff->error;
+}
+sub run{
+  print "run".$br;
 }
