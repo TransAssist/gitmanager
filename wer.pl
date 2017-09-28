@@ -167,6 +167,10 @@ sub init{
 sub check{
   if (-e $tmp_flg) {
     print "already exists".$br;
+	my ($sec, $min, $hour, $day, $mon, $year) = localtime((stat($tmp_flg))[9]);
+    $year = $year + 1900;
+    $mon = $mon + 1;
+    print $year.$mon.$day.":".$hour.$min.$sec."\n";
   }else {
     print "not found".$br;
   }
