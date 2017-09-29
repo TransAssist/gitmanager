@@ -86,7 +86,7 @@ my @onoie = (
 ##set default
 my $default_shebang="#!/usr/bin/env ";
 ##cache
-my $tmp_dir=$sl."tmp".$sl."onoie".$sl."wer".$sl;
+my $tmp_dir=$sl."tmp".$sl."wer".$sl;
 my $tmp_flg=$tmp_dir."ok";
 my $cache=$bin_dir."cache".$sl;
 my $cache_status=$bin_dir."profile".$sl."status.json";
