@@ -72,7 +72,7 @@ my @onoie = (
 "           X1rvdHwI~(zzvvzvvw0+gWHHMHSvvwvvvvvwdHwaJ,.vHkrvvvXNwMw<Jl",
 "          .KjvvWWK>(zvrwwvzQMMSvvvzdKjXvzvvvvXWWkvzvXHmdHvvvrvMkWX>jP",
 "          .fjvvwWD(jvrwvvrX#~dvrvwvwS jkwvvvwf!j0zwvwH}(HkvvrvXNWK>+b",
-"          J\$zrwwHl+rvzvvvwK! (yzwrvX$  ?kvwZ!  JRvwvvW) (dvrwvvHHE><@",
+"          J\$zrwwHl+rvzvvvwK! (yzwrvX\$  ?kvwZ!  JRvwvvW) (dvrwvvHHE><@",
 "          dIzvvwH<wvXvzvvd%   ?UwOZY`    ?`     4kvvQ#!  JXvXwwdHr>(@",
 "          H>zvvwHzvvwvwvwK~                       _?7`   JkvvXHwWw<(@",
 "          #<jvvXqwvvrzvrX@                               JHvzvXHXX<(@",
@@ -115,11 +115,7 @@ if (@ARGV == 0){
     open my $fh, ">", $tmp_flg
       or die "$tmp_flg error : $!";
     close $fh;
-    if($rows > (($#onoie+1)+1) ){
-      foreach my $onoie_line (@onoie) {
-        print $onoie_line, "\n";
-      }
-    }
+    &asciiart();
   }
   foreach (1..$cols) {
     print "+";
@@ -144,6 +140,8 @@ if (@ARGV == 0){
       print "cache_werc:".$cache_werc.$br;
     }elsif($p1 eq "hello"){
       &hello("wer");
+    }elsif($p1 eq "aa"){
+      &asciiart();
     }elsif($p1 eq "check"){
       if(&check($tmp_flg)){
 	    print "true";
@@ -251,4 +249,10 @@ sub save{
 sub run{
 #  print "run".$br;
 }
-
+sub asciiart{
+  if($rows > (($#onoie+1)+1) ){
+    foreach my $onoie_line (@onoie) {
+      print $onoie_line, "\n";
+    }
+  }
+}
