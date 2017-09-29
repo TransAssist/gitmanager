@@ -96,7 +96,7 @@ my $cache_werc=$bin_dir."profile".$sl."werc";
 #print "HelloWorld\n";
 my ($cmd, $param);
 my $wer_help = <<'EOS';
-wer help/hello/run
+wer help/hello/run/config
 wer status load/write
 wer werc load/write
 wer save [url]
@@ -131,7 +131,7 @@ if (@ARGV == 0){
 	#print "p1=$p1 $br";
     if ($p1 eq "help"){
       print "$wer_help";
-    }elsif($p1 eq "status"){
+    }elsif($p1 eq "config"){
       print &date()." ".&time().$br;
       print "---config---".$br;
       print "default_shebang:".$default_shebang."[cmd]$br";
