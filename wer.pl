@@ -60,25 +60,25 @@ my @onoie = (
 "             JIwC!               ?UmwvvvrvvZW.",
 "             ??=                    7WXwvvrvXb.",
 "                                      ?4mXrvvdo.",
-"                  `            .JzVTTCOOVMRvzdHWa,",
+"                               .JzVTTCOOVMRvzdHWa,",
 "                 .C?7Ue-<I+.-v=<::<jrrrzrvvrvdHvZWNa,..(J+.",
 "               .V!_~(Jv<_(JY<~:~~~:~1zvvzvvvvwXvwvrXHMh-::zo",
 "              (5(+zudHZ+zC<:~~::~~:~(zvvvzvvvZWywvwvrvvWn-:vmZ=4;",
 "             .3JrwqMSwAY<~:~::~::~~:(jrwvvwvwvvwXkvzrvrrXHs(dH&(vp",
 "            .D(rzdHHSw3::_~:~~:~~::(zvvvwvvXvrvvd0XwvvzXvwWNxzNk+?I.",
-"            J>zvwHSvwC:(jO++((_((xvjvXvvwvwvvrzrd\$vWwvvvzrvXNydHk<_+",
+"            J>zvwHSvwC:(jO++((_((xvjvXvvwvwvvrzrdWvWwvvvzrvXNydHk<_+",
 "           .K<wrXKvwD<(zrvvvvzvwY` .wvzrwzvzvzvvX} ?WkvvvzvvdN2dKx(d.",
-"           J\$zvwW0wC<(zrrwvrvwV!    drwvXvzvzvrwK`  _WkwvrvvvMNdNI<d;",
+"           JWzvwW0wC<(zrrwvrvwV!    drwvXvzvzvrwK`  _WkwvrvvvMNdNI<d;",
 "           X1rvdHwI~(zzvvzvvw0+gWHHMHSvvwvvvvvwdHwaJ,.vHkrvvvXNwMw<Jl",
 "          .KjvvWWK>(zvrwwvzQMMSvvvzdKjXvzvvvvXWWkvzvXHmdHvvvrvMkWX>jP",
 "          .fjvvwWD(jvrwvvrX#~dvrvwvwS jkwvvvwf!j0zwvwH}(HkvvrvXNWK>+b",
-"          J\$zrwwHl+rvzvvvwK! (yzwrvX\$  ?kvwZ!  JRvwvvW) (dvrwvvHHE><@",
+"          JWzrwwHl+rvzvvvwK! (yzwrvXW  ?kvwZ!  JRvwvvW) (dvrwvvHHE><@",
 "          dIzvvwH<wvXvzvvd%   ?UwOZY`    ?`     4kvvQ#!  JXvXwwdHr>(@",
 "          H>zvvwHzvvwvwvwK~                       _?7`   JkvvXHwWw<(@",
 "          #<jvvXqwvvrzvrX@                               JHvzvXHXX<(@",
 "          #<jvrvWkwwvvrvX@.           ......            .dwrvrwMHX<jb",
-"         .#<jvvrXHNkvzvvXM&        .JVT1??1vUe          (HXzvwd8Xr<j\$",
-"         .#<(wrvvMHRrvvrXKW,      (6<>>?>>??+d; `      .Wdzvvd#XvZ<d{",
+"         .#<jvvrXHNkvzvvXM&        .JVT1??1vUe          (HXzvwd8Xr<jl",
+"         .#<(wrvvMHRrvvrXKW,      (6<>>?>>??+d;        .Wdzvvd#XvZ<d{",
 "         .#<:zvvvvZHwvvrX#wW-     O>>?>>?>>>+H:       .#1krvd#vvr>(d!"
 );
 
@@ -106,7 +106,7 @@ if (@ARGV == 0){
   ##TmpDirectoryCheck
   if (! -d $tmp_dir){
     if(! mkpath $tmp_dir){
-      print "mkpath error:$tmp_dir";
+      print "MkpathError:$tmp_dir";
 	  exit;
 	}
   }
@@ -140,6 +140,13 @@ if (@ARGV == 0){
       print "cache_werc:".$cache_werc.$br;
     }elsif($p1 eq "hello"){
       &hello("wer");
+    }elsif($p1 eq "init"){
+      if ( -e $tmp_flg) {
+        if ( ! unlink $tmp_flg) {
+          print "FlgDeleteError:'$tmp_flg'".$br;
+        }
+      }
+      print "init complete".$br;
     }elsif($p1 eq "aa"){
       &asciiart();
     }elsif($p1 eq "check"){
@@ -189,8 +196,8 @@ if (@ARGV == 0){
 ##subroutine,function
 #&hello("wer");
 sub hello {
-	(my $str) = @_;
-	print "hello,".$str."!".$br;
+  (my $str) = @_;
+  print "hello,".$str."!".$br;
 }
 sub date {
   my @week = ('Sun', 'Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat');
