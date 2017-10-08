@@ -144,6 +144,8 @@ if (@ARGV == 0){
       print "cache_werc:".$cache_werc.$br;
     }elsif($p1 eq "hello"){
       &hello("wer");
+    }elsif($p1 eq "werc"){
+      &werc();
     }elsif($p1 eq "touch"){
       &touch();
     }elsif($p1 eq "init"){
@@ -262,4 +264,7 @@ sub asciiart{
 sub touch{
   open(DATAFILE, ">> ok") or die("Error:$!");
   print DATAFILE &date().$br;
+}
+sub werc{
+  print $ENV{'LOCAL_BIN'}.$sl."werc";
 }
