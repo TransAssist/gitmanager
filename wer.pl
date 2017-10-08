@@ -108,7 +108,7 @@ if (@ARGV == 0){
     if(! mkpath $tmp_dir){
       print "MkpathError:$tmp_dir";
     exit;
-  }
+    }
   }
   ##TmpFlgCheck
   if ( ! -e $tmp_flg) {
@@ -116,6 +116,10 @@ if (@ARGV == 0){
       or die "$tmp_flg error : $!";
     close $fh;
     &asciiart();
+    my ($sec, $min, $hour, $day, $mon, $year) = localtime((stat($tmp_flg))[9]);
+    $year = $year + 1900;
+    $mon = $mon + 1;
+    print $year.$mon.$day.":".$hour.$min.$sec."\n";
   }
   foreach (1..$cols) {
     print "+";
@@ -140,6 +144,8 @@ if (@ARGV == 0){
       print "cache_werc:".$cache_werc.$br;
     }elsif($p1 eq "hello"){
       &hello("wer");
+    }elsif($p1 eq "touch"){
+      &touch();
     }elsif($p1 eq "init"){
       if ( -e $tmp_flg) {
         if ( ! unlink $tmp_flg) {
@@ -149,16 +155,6 @@ if (@ARGV == 0){
       print "init complete".$br;
     }elsif($p1 eq "aa"){
       &asciiart();
-    }elsif($p1 eq "check"){
-      if(&check($tmp_flg)){
-      print "true";
-#   my ($sec, $min, $hour, $day, $mon, $year) = localtime((stat($tmp_flg))[9]);
-#    $year = $year + 1900;
-#    $mon = $mon + 1;
-#    print $year.$mon.$day.":".$hour.$min.$sec."\n";
-    }else{
-        print "false";
-    }
     }elsif($p1 eq "run"){
       &run();
   }else{
@@ -254,7 +250,7 @@ sub save{
   my $file = $ff->fetch() or die $ff->error;
 }
 sub run{
-#  print "run".$br;
+  print "run".$br;
 }
 sub asciiart{
   if($rows > (($#onoie+1)+1) ){
@@ -262,4 +258,8 @@ sub asciiart{
       print $onoie_line, "\n";
     }
   }
+}
+sub touch{
+  open(DATAFILE, ">> ok") or die("Error:$!");
+  print DATAFILE &date().$br;
 }
