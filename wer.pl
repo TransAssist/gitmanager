@@ -290,9 +290,9 @@ sub werc_nvm{
   open(DATAFILE, ">".$werc_path) or die("Error:$!");
   print DATAFILE &werc_default_bash();
   &si($br.'#nvm');
-  &si('#export NVM_DIR="$HOME/.nvm"');
-  &si('#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"');
-  &si('#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"');
+  &si('export NVM_DIR="$HOME/.nvm"');
+  &si('[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"');
+  &si('[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"');
   print DATAFILE $br.'echo "nvm werc created '.&date().' '.&time().'"';
   print DATAFILE &so();
 }
