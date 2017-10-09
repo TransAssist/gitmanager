@@ -168,6 +168,8 @@ if (@ARGV == 0){
         &werc_default();
       }elsif($p2 eq "nvm"){
         &werc_nvm();
+      }elsif($p2 eq "rbenv"){
+        &werc_rbenv();
       }
     }elsif ($p1 eq "status"){
       ##for status.json
@@ -296,6 +298,15 @@ sub werc_nvm{
   print DATAFILE $br.'echo "nvm werc created '.&date().' '.&time().'"';
   print DATAFILE &so();
 }
-
+sub werc_rbenv{
+  my $werc_path = $bin_dir.$sl."werc";
+  open(DATAFILE, ">".$werc_path) or die("Error:$!");
+  print DATAFILE &werc_default_bash();
+  &si($br.'#rbenv');
+  &si('export PATH="$HOME/.rbenv/bin:$PATH"');
+  &si('eval "$(rbenv init -)"');
+  print DATAFILE $br.'echo "rbenv werc created '.&date().' '.&time().'"';
+  print DATAFILE &so();
+}
 
 
