@@ -44,7 +44,7 @@ if (-l $bin_path) {#symbolic check
     $bin_path = readlink($bin_path);
 }
 #get parent bin path
-$bin_dir = dirname($bin_path).$sl;
+$bin_dir = dirname($bin_path);
 #print "bin_path:".$bin_path."\n";
 #print "bin_dir:".$bin_dir."\n";
 (my $rows,my $cols)=split ' ', qx"stty size </dev/tty 2>/dev/null";
@@ -88,19 +88,17 @@ my $default_shebang="#!/usr/bin/env ";
 ##cache
 my $tmp_dir=$sl."tmp".$sl."wer".$sl;
 my $tmp_flg=$tmp_dir."ok";
-my $cache=$bin_dir."cache".$sl;
-my $cache_status=$bin_dir."profile".$sl."status.json";
-my $cache_werc=$bin_dir."profile".$sl."werc";
+my $cache=$bin_dir.$sl."cache".$sl;
+my $cache_status=$bin_dir.$sl."profile".$sl."status.json";
 
 ##main
 #print "HelloWorld\n";
 my ($cmd, $param);
 my $wer_help = <<'EOS';
-wer help/hello/run/config
+wer help/hello/config
 wer status load/write
-wer werc load/write
+wer c default
 wer save [url]
-.bashrc:+`perl $LOCAL_BIN/wer run`
 EOS
 if (@ARGV == 0){
   ##TmpDirectoryCheck
@@ -141,11 +139,8 @@ if (@ARGV == 0){
       print "tmp_flg:".$tmp_flg.$br;
       print "cache:".$cache.$br;
       print "cache_status:".$cache_status.$br;
-      print "cache_werc:".$cache_werc.$br;
     }elsif($p1 eq "hello"){
       &hello("wer");
-    }elsif($p1 eq "werc"){
-      &werc();
     }elsif($p1 eq "touch"){
       &touch();
     }elsif($p1 eq "init"){
@@ -157,15 +152,20 @@ if (@ARGV == 0){
       print "init complete".$br;
     }elsif($p1 eq "aa"){
       &asciiart();
-    }elsif($p1 eq "run"){
-      &run();
-  }else{
+    }else{
       print "unknown simple param:$p1".$br;
-  }
+    }
   }elsif(@ARGV == 2){
     print "p1=$p1,p2=$p2".$br;
     if ($p1 eq "save"){
       &save($p2);
+    }elsif($p1 eq "c"){
+      ##for werc
+      if($p2 eq "default"){
+        &werc_default();
+      }elsif($p2 eq "nvm"){
+        &werc_nvm();
+      }
     }elsif ($p1 eq "status"){
       ##for status.json
       if($p2 eq "load"){
@@ -173,14 +173,8 @@ if (@ARGV == 0){
       }elsif($p2 eq "write"){
         &status_write();
       }
-    }elsif($p1 eq "werc"){
-      ##for werc
-      if($p2 eq "load"){
-        &werc_load();
-      }elsif($p2 eq "write"){
-        &werc_write();
-      }
     }
+    printf("complete".$br);
   }elsif(@ARGV == 3){
     print "p1=$p1,p2=$p2,p3=$p3".$br;
   }
@@ -208,6 +202,16 @@ sub time{
   (my $sec,my $min,my $hour) = (localtime(time))[0..2];
   return "$hour:$min:$sec";
 }
+my @stackio;
+sub si{
+  (my $input) = @_;
+  @stackio = (@stackio,$input);
+}
+sub so{
+  my $stack=join("\n",@stackio);
+  @stackio=();
+  return $stack;
+}
 sub exec {
   (my $command) = @_;
   my $result = `$command 2>&1`;
@@ -215,7 +219,7 @@ sub exec {
 }
 sub test {
   (my $name,my $cmdpath) = @_;
-  my $res = &exec($bin_dir.$cmdpath);
+  my $res = &exec($bin_dir.$sl.$cmdpath);
   my $result = $res eq "complete" ? "ok" : "ng";
   print "test_".$name." : ".$res." ==> [".$result."]".$br;
 }
@@ -238,21 +242,12 @@ sub status_load{
 sub status_write{
   print "status write".$br;
 }
-sub werc_load{
-  print "werc load".$br;
-}
-sub werc_write{
-  print "werc write".$br;
-}
 sub save{
   (my $url) = @_;
 #  my $url = "http://x-as.com/TransAssist.gif";
   print "save:$url".$br;
   my $ff = File::Fetch->new(uri => $url);
   my $file = $ff->fetch() or die $ff->error;
-}
-sub run{
-  print "run".$br;
 }
 sub asciiart{
   if($rows > (($#onoie+1)+1) ){
@@ -265,6 +260,37 @@ sub touch{
   open(DATAFILE, ">> ok") or die("Error:$!");
   print DATAFILE &date().$br;
 }
-sub werc{
-  print $ENV{'LOCAL_BIN'}.$sl."werc";
+sub werc_default_bash{
+  &si('#!/bin/bash');
+  &si('##EnvCheck');
+  &si('if [ -z "${LOCAL_BIN+x}" ] ; then');
+  &si(' echo "require \$LOCAL_BIN"');
+  &si(' exit');
+  &si('fi');
+  &si('##Wer');
+  &si('$LOCAL_BIN/wer');
+  &si('##WercStart');
+  &si('for no in `seq 1  $(tput cols)`; do');
+  &si('  printf "-"');
+  &si('done');
+  &si('echo "created '.&date().' '.&time().'"');
+  return &so();
 }
+sub werc_default{
+  my $werc_path = $bin_dir.$sl."werc";
+  open(DATAFILE, ">".$werc_path) or die("Error:$!");
+  print DATAFILE &werc_default_bash();
+}
+sub werc_nvm{
+  my $werc_path = $bin_dir.$sl."werc";
+  open(DATAFILE, ">".$werc_path) or die("Error:$!");
+  print DATAFILE &werc_default_bash();
+  &si('#nvm');
+  &si('#export NVM_DIR="$HOME/.nvm"');
+  &si('#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"');
+  &si('#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"');
+  print DATAFILE &so();
+}
+
+
+
