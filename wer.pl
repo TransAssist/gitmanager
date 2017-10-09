@@ -14,6 +14,14 @@ use File::Basename;
 use File::Path 'mkpath';
 use JSON;
 
+##help
+my $wer_help = <<'EOS';
+wer help/hello/config
+wer status load/write
+wer c default/nvm
+wer save [url]
+EOS
+
 ##os
 my $br;
 my $sl;
@@ -84,6 +92,7 @@ my @onoie = (
 
 
 ##set default
+my $werc_path = $bin_dir.$sl."werc";
 my $default_shebang="#!/usr/bin/env ";
 ##cache
 my $tmp_dir=$sl."tmp".$sl."wer".$sl;
@@ -94,12 +103,6 @@ my $cache_status=$bin_dir.$sl."profile".$sl."status.json";
 ##main
 #print "HelloWorld\n";
 my ($cmd, $param);
-my $wer_help = <<'EOS';
-wer help/hello/config
-wer status load/write
-wer c default
-wer save [url]
-EOS
 if (@ARGV == 0){
   ##TmpDirectoryCheck
   if (! -d $tmp_dir){
@@ -262,6 +265,8 @@ sub touch{
 }
 sub werc_default_bash{
   &si('#!/bin/bash');
+  &si('export WER="'.$bin_path.'"');
+  &si('export WERC="'.$werc_path.'"');
   &si('##EnvCheck');
   &si('if [ -z "${LOCAL_BIN+x}" ] ; then');
   &si(' echo "require \$LOCAL_BIN"');
@@ -273,22 +278,22 @@ sub werc_default_bash{
   &si('for no in `seq 1  $(tput cols)`; do');
   &si('  printf "-"');
   &si('done');
-  &si('echo "created '.&date().' '.&time().'"');
   return &so();
 }
 sub werc_default{
-  my $werc_path = $bin_dir.$sl."werc";
   open(DATAFILE, ">".$werc_path) or die("Error:$!");
   print DATAFILE &werc_default_bash();
+  print DATAFILE $br.'echo "default werc created '.&date().' '.&time().'"';
 }
 sub werc_nvm{
   my $werc_path = $bin_dir.$sl."werc";
   open(DATAFILE, ">".$werc_path) or die("Error:$!");
   print DATAFILE &werc_default_bash();
-  &si('#nvm');
+  &si($br.'#nvm');
   &si('#export NVM_DIR="$HOME/.nvm"');
   &si('#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"');
   &si('#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"');
+  print DATAFILE $br.'echo "nvm werc created '.&date().' '.&time().'"';
   print DATAFILE &so();
 }
 
