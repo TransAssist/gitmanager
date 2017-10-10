@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-if [ -z "${LOCAL_BIN+x}" ] ; then
- echo "require \$LOCAL_BIN"
+if [ -z "${BIN+x}" ] ; then
+ echo "require env \$LOCAL_BIN"
  exit
 fi
-INSTALL=$LOCAL_BIN/wer
+INSTALL=$BIN/wer
 rm -f $INSTALL
 ln -s $(pwd)/wer.pl $INSTALL
 

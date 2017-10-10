@@ -270,12 +270,12 @@ sub werc_default_bash{
   &si('export WER="'.$bin_path.'"');
   &si('export WERC="'.$werc_path.'"');
   &si('##EnvCheck');
-  &si('if [ -z "${LOCAL_BIN+x}" ] ; then');
-  &si(' echo "require \$LOCAL_BIN"');
+  &si('if [ -z "${BIN+x}" ] ; then');
+  &si(' echo "require env \$BIN"');
   &si(' exit');
   &si('fi');
   &si('##Wer');
-  &si('$LOCAL_BIN/wer');
+  &si('$BIN/wer');
   &si('##WercStart');
   &si('for no in `seq 1  $(tput cols)`; do');
   &si('  printf "-"');
