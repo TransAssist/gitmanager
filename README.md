@@ -7,9 +7,9 @@ wer c default
 source /path/to/wer/werc
 ```
 
-## environment
+## require
 * perl >= 5
-* (system envroiment $LOCAL\_BIN e.g. ~/bin)
+* (system envroiment $\_BIN e.g. ~/bin)
 
 # install
 `make install`

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 if [ -z "${BIN+x}" ] ; then
- echo "require env \$LOCAL_BIN"
+ echo "require env \$BIN"
  exit
 fi
 INSTALL=$BIN/wer
