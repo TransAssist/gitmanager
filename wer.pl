@@ -16,7 +16,7 @@ use JSON;
 
 ##help
 my $wer_help = <<'EOS';
-wer help/hello/config
+wer help/hello/config/aa/init
 wer status load/write
 wer c default/nvm
 wer save [url]
